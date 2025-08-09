@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fetchNui } from "$lib/utils/fetchNui";
 	import { useNuiEvent } from "$lib/utils/useNuiEvent";
-    import Shop from "./shop.svelte";
+    import Shop from "./shop/shop.svelte";
     import { visible } from "src/store";
     let shopVisible:boolean = $state(false);
     let dialogArray:Array<string> = ['Want to buy something?','Hello?','What do you want?','Looking for something?','Keep walking buddy.'];

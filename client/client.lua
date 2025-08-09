@@ -7,7 +7,7 @@ end)
 --[FIXME: Only works with one salesman]
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(10)
         local playerCoords = GetEntityCoords(PlayerPedId())
         local pedCoords = GetEntityCoords(created)
         local dist = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, pedCoords.x, pedCoords.y, pedCoords.z, true)
@@ -56,14 +56,12 @@ RegisterCommand('salesman', function()
     FreezeEntityPosition(created,true)
     SetPedConfigFlag(created, 0, true)
     SetEntityInvincible(created, true)
-    
-
-
+end)
+RegisterNUICallback('getGun',function(data,cb)
+    --TODO: ADD CHECKING SYSTEM FOR MONEY 
+    local gunHash = data
+    local player = PlayerPedId()
+    GiveWeaponToPed(player, gunHash, 60, false, true)
 end)
 
--- RegisterCommand('openUI', function()
---     SendNUI('setVisible', true)
---     SetNuiFocus(true, true)
---     print("Svelte showing")
--- end, false)
 
