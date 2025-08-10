@@ -1,9 +1,13 @@
 <script lang="ts">
+	import AddGunButton from "./adminAddGun/addGunButton.svelte";
+
 
 </script>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&display=swap');
     #header{
+        display: grid;
+        grid-template-columns: 10vh 1fr 8vh;
         width: 100%;
         grid-column: 2;
         grid-row: 1;
@@ -18,5 +22,6 @@
     }
 </style>
 <div id="header">
-    Shop
+    <div id="headerName">Shop</div>
+    <AddGunButton />
 </div>

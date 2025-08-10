@@ -1,8 +1,7 @@
 <script lang="ts">
 	import GunContainer from "./gunContainer.svelte";
 	import { WeaponModel } from "./weapons";
-    let arrayOfGuns:Array<WeaponModel> = $state([WeaponModel.weapon_pistol50,WeaponModel.weapon_pistol_mk2,WeaponModel.weapon_bat]);
-
+    let arrayOfGuns:Array<WeaponModel> = $state([]);
 </script>
 <style>
     #body{
