@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Body from "./body.svelte";
 	import Header from "./header.svelte";
-
-
+    let arrayOfGuns:Array<any> = $state([]);
 </script>
 <style>
     div{
@@ -18,6 +17,6 @@
     }
 </style>
 <div>
-    <Header />
-    <Body />
+    <Header bind:arrayOfGuns/>
+    <Body bind:arrayOfGuns/>
 </div>

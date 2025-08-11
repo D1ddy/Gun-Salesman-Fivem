@@ -1,7 +1,6 @@
 <script lang="ts">
 	import AddGunButton from "./adminAddGun/addGunButton.svelte";
-
-
+     let { arrayOfGuns = $bindable()} = $props();
 </script>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&display=swap');
@@ -23,5 +22,5 @@
 </style>
 <div id="header">
     <div id="headerName">Shop</div>
-    <AddGunButton />
+    <AddGunButton bind:arrayOfGuns />
 </div>

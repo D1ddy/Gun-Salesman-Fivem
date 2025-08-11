@@ -1,7 +1,9 @@
 <script lang="ts">
 	import GunContainer from "./gunContainer.svelte";
 	import { WeaponModel } from "./weapons";
-    let arrayOfGuns:Array<WeaponModel> = $state([]);
+    
+   
+    let {arrayOfGuns=$bindable()}= $props();
 </script>
 <style>
     #body{

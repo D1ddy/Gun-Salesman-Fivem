@@ -1,7 +1,9 @@
 <script lang="ts">
-	import ChooseGun from "./chooseGun.svelte";
-	import ChoosePrice from "./choosePrice.svelte";
+	import ChooseGunAndPrice from "./chooseGunAndPrice.svelte";
 	import ConfirmGun from "./confirmGun.svelte";
+    let price:number = $state(0);
+    let gunName:string = $state('');
+    let { arrayOfGuns = $bindable() ,addGunVisible = $bindable() } = $props();
 </script>
 <style>
     #addGunMain{
@@ -26,7 +28,6 @@
 </style>
 <div id="addGunMain">
     <div id="title"> Choose Gun </div>
-    <ChooseGun />
-    <ChoosePrice />
-    <ConfirmGun />
+    <ChooseGunAndPrice bind:price bind:gunName />
+    <ConfirmGun {price} {gunName} bind:arrayOfGuns bind:addGunVisible={addGunVisible}/>
 </div>
