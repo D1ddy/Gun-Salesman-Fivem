@@ -45,6 +45,7 @@ Citizen.CreateThread(function()
     end
 end)
 RegisterCommand('salesman', function()
+    --[This should probably be server-side]--
     local player = PlayerPedId()
     local ped = 'a_m_m_hillbilly_01'
     RequestModel(ped)
@@ -58,10 +59,16 @@ RegisterCommand('salesman', function()
     SetEntityInvincible(created, true)
 end)
 RegisterNUICallback('getGun',function(data,cb)
-    --TODO: ADD CHECKING SYSTEM FOR MONEY 
-    local gunHash = data
+    --[This should probably be server-side]--
+    local gunHash = data[1]
+    local price = data[2]
     local player = PlayerPedId()
-    GiveWeaponToPed(player, gunHash, 60, false, true)
+    local playerMoney = GetPedMoney(player)
+    if playerMoney >= price then
+        GiveWeaponToPed(player, gunHash, 60, false, true)
+        local amount = playerMoney - price
+        SetPedMoney(player, amount)
+    end
 end)
 
 

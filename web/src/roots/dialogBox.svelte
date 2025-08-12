@@ -8,9 +8,12 @@
     let dialogText:string = dialogArray[Math.floor(Math.random() * dialogArray.length)];
     visible.subscribe(()=>{});
     function handleKeydown(event:any) {
-        visible.set(false)
-		fetchNui('close');
-        fetchNui('closeDialog');
+        if(event.code == 'Escape'){
+            visible.set(false)
+            fetchNui('close');
+            fetchNui('closeDialog');
+
+        }
 	}
 </script>
 <style>

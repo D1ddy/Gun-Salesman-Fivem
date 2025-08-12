@@ -18,9 +18,8 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div onclick="{() => {
-      fetchNui('getGun',WeaponModel[gun.gunName])
+      fetchNui('getGun',[WeaponModel[gun.gunName],gun.price]);
 }}">
-<!-- FIXME: INSTEAD OF GUN HASH IT SHOULD SAY THE GUNS MODEL -->
    {gun.gunName}
    {gun.price} 
 </div>
