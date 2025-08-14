@@ -17,7 +17,6 @@ server_script "server/**/*"
 files {
   'web/dist/index.html',
   'web/dist/**/*',
-  'web/src/static/weaponImg/weapon_advancedrifle.png',
-  'web/src/static/weaponImg/weapon_ball.png',
-  'web/src/static/weaponImg/weapon_appistol.png'
+  'web/src/static/weaponImg/**/*'
+  
 }

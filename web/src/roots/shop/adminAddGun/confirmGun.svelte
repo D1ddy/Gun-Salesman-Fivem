@@ -6,6 +6,8 @@
     #confirmButton{
         grid-column: 2;
         grid-row: 5;
+        background-color: #222;
+        color: #f0f0f0;
     }
 </style>
 <button id="confirmButton" onclick="{()=>{
