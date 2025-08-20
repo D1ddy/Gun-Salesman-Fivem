@@ -30,7 +30,8 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div onclick="{() => {
-      fetchNui('getGun',[WeaponModel[gun.gunName],gun.price]);
+    // WeaponModel[gun.gunName is the Hash of the weapon]
+      fetchNui('getGun',[gun.gunName,gun.price]);
 }}">
    <img src='/web/src/static/weaponImg/{gun.gunName}.png' alt="{gun.gunName}">
    {gun.price} 

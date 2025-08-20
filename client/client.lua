@@ -1,3 +1,4 @@
+QBCore = exports['qb-core']:GetCoreObject()
 created = nil
 interactDistance = 3
 closeDialog = true
@@ -59,16 +60,11 @@ RegisterCommand('salesman', function()
     SetEntityInvincible(created, true)
 end)
 RegisterNUICallback('getGun',function(data,cb)
-    --[This should probably be server-side]--
-    local gunHash = data[1]
+    local gunName = data[1]
     local price = data[2]
-    local player = PlayerPedId()
+    local player = GetPlayerServerId(PlayerId())
     local playerMoney = GetPedMoney(player)
-    if playerMoney >= price then
-        GiveWeaponToPed(player, gunHash, 60, false, true)
-        local amount = playerMoney - price
-        SetPedMoney(player, amount)
-    end
+    TriggerServerEvent('buyWeapon:server', player,gunName,price)
 end)
 
 

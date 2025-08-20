@@ -90,4 +90,9 @@ export enum WeaponModel {
   weapon_switchblade = 0xDFE37640,
   weapon_vintagepistol = 0x83839C4,
   weapon_wrench = 0x19044EE0,
+  smg_ammo = 1,
+  pistol_ammo = 2,
+  mg_ammo = 3,
+  rifle_ammo = 4,
+  shotgun_ammo = 5
 }
