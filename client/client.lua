@@ -2,22 +2,49 @@ QBCore = exports['qb-core']:GetCoreObject()
 created = nil
 interactDistance = 3
 closeDialog = true
+arrayOfSalesman = {}
+RegisterNetEvent('SpawnExistingSalesman:client',function(x,y,z)
+    local ped = 'a_m_m_hillbilly_01'
+    RequestModel(ped)
+    repeat Wait(0) until HasModelLoaded(ped)
+    --FIXME: Other peds can move only the last one cant
+    created = CreatePed(4, ped, x, y , z, 180, true, true)
+    table.insert(arrayOfSalesman,created)
+    Wait(500)
+    FreezeEntityPosition(created,true)
+    SetPedConfigFlag(created, 0, true)
+    SetEntityInvincible(created, true)
+end)
 RegisterNUICallback('closeDialog', function(_, cb)
     closeDialog = false
 end)
---[FIXME: Only works with one salesman]
+function findClosestPed() 
+    local playerCoords = GetEntityCoords(PlayerPedId())
+    local indexOfClosestPed = 1
+    local closestPed = 100
+    for i = 1, #arrayOfSalesman, 1 do
+        local pedCoords = GetEntityCoords(arrayOfSalesman[i])
+        local dist = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, pedCoords.x, pedCoords.y, pedCoords.z, true)
+        if dist < closestPed then
+            closestPed = dist
+            indexOfClosestPed = i
+        end
+    end
+    return indexOfClosestPed
+end
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(10)
+        Citizen.Wait(100)
         local playerCoords = GetEntityCoords(PlayerPedId())
-        local pedCoords = GetEntityCoords(created)
+        local closestPedIndex = findClosestPed()
+        local pedCoords = GetEntityCoords(arrayOfSalesman[closestPedIndex])
         local dist = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, pedCoords.x, pedCoords.y, pedCoords.z, true)
-
         if dist < interactDistance then
             SendNUI('openPopUp', true)
             SetNuiFocus(false, false)
             if IsControlJustPressed(0, 38) then -- 38 is E key
                 --[Pan the camera to the ped]
+                --FIXME: Camera now isn't working how it should the rotations fucked BUG is after added the option for more peds
                 SendNUI('close',false) --Closes press E to interact
                 local cam = CreateCamera("DEFAULT_SCRIPTED_CAMERA", true)
                 local rotationOrder = 2
@@ -49,15 +76,22 @@ RegisterCommand('salesman', function()
     --[This should probably be server-side]--
     local player = PlayerPedId()
     local ped = 'a_m_m_hillbilly_01'
+    local playerCoords = GetEntityCoords(PlayerPedId())
     RequestModel(ped)
     repeat Wait(0) until HasModelLoaded(ped)
     local playerCoords = GetEntityCoords(PlayerPedId())
-    
     created = CreatePed(CIVMALE, ped, playerCoords.x, playerCoords.y + 1, playerCoords.z, 180, true, true)
+    table.insert(arrayOfSalesman,created)
     Wait(500)
+    TriggerServerEvent('createSalesman:server',player, ped, playerCoords.x, playerCoords.y + 1, playerCoords.z)
     FreezeEntityPosition(created,true)
     SetPedConfigFlag(created, 0, true)
     SetEntityInvincible(created, true)
+end)
+RegisterNUICallback('addGunToInventory',function(data,cb)
+    local gunName = data;
+    local indexOfClosestPed = findClosestPed()
+    TriggerServerEvent('addWeaponToSalsemanInventory:server',indexOfClosestPed,gunName)
 end)
 RegisterNUICallback('getGun',function(data,cb)
     local gunName = data[1]

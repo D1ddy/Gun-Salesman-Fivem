@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fetchNui } from "$lib/utils/fetchNui";
+
     let {price,gunName,arrayOfGuns = $bindable(),addGunVisible = $bindable()}:{price:number, gunName:string,arrayOfGuns:Array<any>,addGunVisible:boolean} = $props();
 
 </script>
@@ -13,4 +15,5 @@
 <button id="confirmButton" onclick="{()=>{
     arrayOfGuns.push({price:price,gunName:gunName});
     addGunVisible = false;
+    fetchNui('addGunToInventory',gunName)
 }}">Confirm</button>
