@@ -34,7 +34,7 @@ function findClosestPed()
 end
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(100)
+        Citizen.Wait(20)
         local playerCoords = GetEntityCoords(PlayerPedId())
         local closestPedIndex = findClosestPed()
         local pedCoords = GetEntityCoords(arrayOfSalesman[closestPedIndex])
@@ -73,7 +73,7 @@ Citizen.CreateThread(function()
     end
 end)
 RegisterCommand('salesman', function()
-    --[This should probably be server-side]--
+    --[TODO: Check for admin privls]--
     local player = PlayerPedId()
     local ped = 'a_m_m_hillbilly_01'
     local playerCoords = GetEntityCoords(PlayerPedId())
@@ -89,9 +89,10 @@ RegisterCommand('salesman', function()
     SetEntityInvincible(created, true)
 end)
 RegisterNUICallback('addGunToInventory',function(data,cb)
-    local gunName = data;
+    local gunName = data[1]
+    local price = data[2]
     local indexOfClosestPed = findClosestPed()
-    TriggerServerEvent('addWeaponToSalsemanInventory:server',indexOfClosestPed,gunName)
+    TriggerServerEvent('addWeaponToSalsemanInventory:server',indexOfClosestPed,gunName,price)
 end)
 RegisterNUICallback('getGun',function(data,cb)
     local gunName = data[1]
@@ -100,5 +101,18 @@ RegisterNUICallback('getGun',function(data,cb)
     local playerMoney = GetPedMoney(player)
     TriggerServerEvent('buyWeapon:server', player,gunName,price)
 end)
-
+RegisterNUICallback('loadInventoryNames',function(_,cb)
+    local index = findClosestPed()
+    TriggerServerEvent('getInventoryNames',index)
+    RegisterNetEvent('getInventoryNames:client',function(inventory)
+        cb(inventory)
+    end)
+end)
+RegisterNUICallback('loadInventoryPrice',function(_,cb)
+    local index = findClosestPed()
+    TriggerServerEvent('getInventoryPrice',index)
+    RegisterNetEvent('getInventoryPrice:client',function(prices)
+        cb(prices)
+    end)
+end)
 

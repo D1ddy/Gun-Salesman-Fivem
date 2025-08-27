@@ -23,9 +23,58 @@ RegisterNetEvent('createSalesman:server',function(playerId,ped,x,y,z)
         z
     })
 end)
-RegisterNetEvent('addWeaponToSalsemanInventory:server',function(indexOfClosestPed,gunName)
-    print('testing')
-    --TODO--
+RegisterNetEvent('addWeaponToSalsemanInventory:server',function(index,gunName,price)
+    local inventory = MySQL.Sync.fetchAll('SELECT inventory FROM salesman WHERE id = ?',{
+        index
+    },function()
+        print("WORKS")
+    end)
+    inventory = inventory[1]['inventory']
+    if inventory == nil then
+        inventory = gunName
+    else
+        inventory = inventory..',' .. gunName
+    end
+    MySQL.update('UPDATE salesman SET inventory = ? WHERE id = ?', {
+        inventory,
+        index
+    },function()
+        print('Updated!')
+    end)
+    ------------------------------------------------------------------------------------------
+    local inventoryPrice = MySQL.Sync.fetchAll('SELECT price FROM salesman WHERE id = ?',{
+        index
+    },function()
+        print("WORKS")
+    end)
+    inventoryPrice = inventoryPrice[1]['price']
+    if inventoryPrice == nil then
+        inventoryPrice = price
+    else
+        inventoryPrice = inventoryPrice..',' .. price
+    end
+    MySQL.update('UPDATE salesman SET price = ? WHERE id = ?',{
+        inventoryPrice,
+        index
+    })
+end)
+RegisterNetEvent('getInventoryNames',function(index)
+    local src = source
+    local inventory = MySQL.Sync.fetchAll('SELECT inventory FROM salesman WHERE id = ?',{
+        index
+    },function()
+        print("WORKS")
+    end)
+    TriggerClientEvent('getInventoryNames:client', src, inventory[1]['inventory'])
+end)
+RegisterNetEvent('getInventoryPrice',function(index)
+    local src = source
+    local inventory = MySQL.Sync.fetchAll('SELECT price FROM salesman WHERE id = ?',{
+        index
+    },function()
+        print("WORKS")
+    end)
+    TriggerClientEvent('getInventoryPrice:client', src, inventory[1]['price'])
 end)
 RegisterNetEvent('buyWeapon:server',function(playerId,gunName,price)
     

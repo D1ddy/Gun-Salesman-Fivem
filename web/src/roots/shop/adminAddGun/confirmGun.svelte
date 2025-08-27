@@ -15,5 +15,5 @@
 <button id="confirmButton" onclick="{()=>{
     arrayOfGuns.push({price:price,gunName:gunName});
     addGunVisible = false;
-    fetchNui('addGunToInventory',gunName)
+    fetchNui('addGunToInventory',[gunName,price])
 }}">Confirm</button>

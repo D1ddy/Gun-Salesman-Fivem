@@ -1,7 +1,27 @@
 <script lang="ts">
+	import { fetchNui } from "$lib/utils/fetchNui";
+	import { useNuiEvent } from "$lib/utils/useNuiEvent";
 	import Body from "./body.svelte";
 	import Header from "./header.svelte";
     let arrayOfGuns:Array<any> = $state([]);
+    let calledArrayNames:Array<string> = $derived([]);
+    let calledArrayPrice:Array<number> = $derived([]);
+    fetchNui<any[]>('loadInventoryNames').then((data:any) => {
+        data = data.split(",");
+        for(let i = 1; i < data.length; i++){
+            calledArrayNames.push(data[i])
+        }
+        console.log("Got inventory:", calledArrayNames);
+    });
+    
+    fetchNui<any[]>('loadInventoryPrice').then((data:any) => {
+        data = data.split(",");
+        for(let i = 1; i < data.length; i++){
+            calledArrayPrice.push(parseInt(data[i]));
+        }
+        console.log("Got prices:", calledArrayPrice);
+    });
+    // TODO FIGURE THIS SHIT FROM LINE 9 TO 23 IM TWEAKING THE FUCK OUT 
 </script>
 <style>
     div{
