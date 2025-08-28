@@ -77,7 +77,7 @@ RegisterNetEvent('getInventoryPrice',function(index)
     TriggerClientEvent('getInventoryPrice:client', src, inventory[1]['price'])
 end)
 RegisterNetEvent('buyWeapon:server',function(playerId,gunName,price)
-    
+    price = tonumber(price)
     local Player = QBCore.Functions.GetPlayer(source)
     if not Player then return end
     local money = Player.PlayerData.money
