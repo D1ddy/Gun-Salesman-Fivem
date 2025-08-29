@@ -13,15 +13,19 @@ Citizen.CreateThread(function()
     spawnSalesMan()
 end)
 RegisterNetEvent('createSalesman:server',function(playerId,ped,x,y,z)
-    local numberOfRows = MySQL.Sync.fetchAll('SELECT COUNT(*) FROM salesman')
-    local pedId = numberOfRows[1]["COUNT(*)"]
-    pedId = pedId + 1
-    MySQL.insert('INSERT INTO salesman (id,positionX,positionY,positionZ) VALUES (?, ?, ? ,?)',{
-        pedId,
-        x,
-        y,
-        z
-    })
+    local src = source
+    if QBCore.Functions.HasPermission(src, "admin") then
+        print("Player is an admin")
+        local numberOfRows = MySQL.Sync.fetchAll('SELECT COUNT(*) FROM salesman')
+        local pedId = numberOfRows[1]["COUNT(*)"]
+        pedId = pedId + 1
+        MySQL.insert('INSERT INTO salesman (id,positionX,positionY,positionZ) VALUES (?, ?, ? ,?)',{
+            pedId,
+            x,
+            y,
+            z
+        })
+    end
 end)
 RegisterNetEvent('addWeaponToSalsemanInventory:server',function(index,gunName,price)
     local inventory = MySQL.Sync.fetchAll('SELECT inventory FROM salesman WHERE id = ?',{
@@ -84,12 +88,27 @@ RegisterNetEvent('buyWeapon:server',function(playerId,gunName,price)
     local cash = money.cash
     local bank = money.bank
     if cash >= price then
-
+        
         local search = string.find(gunName,"ammo")
         Player.Functions.SetMoney('cash', Player.PlayerData.money.cash - price)
         if search ~= nil then
             exports['qb-inventory']:AddItem(playerId, gunName, 30, false, false, 'qb-inventory:itemBought')
         end
         exports['qb-inventory']:AddItem(playerId, gunName, 1, false, false, 'qb-inventory:itemBought')
+    end
+end)
+RegisterNetEvent('checkprivileges:server',function(_,cb)
+    src = source
+    if QBCore.Functions.HasPermission(src, "admin") then
+        TriggerClientEvent('playerIsAdmin', src)
+    else
+        TriggerClientEvent('playerIsNotAdmin', src)
+    end
+end)
+RegisterCommand('salesman', function(src, args, raw)
+    if QBCore.Functions.HasPermission(src, "admin") then
+        TriggerClientEvent('salesman:client', src)
+    else
+        print("[Server] You are not an Admin")
     end
 end)

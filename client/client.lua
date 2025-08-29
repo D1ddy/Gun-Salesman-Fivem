@@ -72,21 +72,20 @@ Citizen.CreateThread(function()
         end
     end
 end)
-RegisterCommand('salesman', function()
-    --[TODO: Check for admin privls]--
-    local player = PlayerPedId()
-    local ped = 'a_m_m_hillbilly_01'
-    local playerCoords = GetEntityCoords(PlayerPedId())
-    RequestModel(ped)
-    repeat Wait(0) until HasModelLoaded(ped)
-    local playerCoords = GetEntityCoords(PlayerPedId())
-    created = CreatePed(CIVMALE, ped, playerCoords.x, playerCoords.y + 1, playerCoords.z, 180, true, true)
-    table.insert(arrayOfSalesman,created)
-    Wait(500)
-    TriggerServerEvent('createSalesman:server',player, ped, playerCoords.x, playerCoords.y + 1, playerCoords.z)
-    FreezeEntityPosition(created,true)
-    SetPedConfigFlag(created, 0, true)
-    SetEntityInvincible(created, true)
+RegisterNetEvent('salesman:client', function()
+        local player = PlayerPedId()
+        local ped = 'a_m_m_hillbilly_01'
+        local playerCoords = GetEntityCoords(PlayerPedId())
+        RequestModel(ped)
+        repeat Wait(0) until HasModelLoaded(ped)
+        local playerCoords = GetEntityCoords(PlayerPedId())
+        created = CreatePed(CIVMALE, ped, playerCoords.x, playerCoords.y + 1, playerCoords.z, 180, true, true)
+        table.insert(arrayOfSalesman,created)
+        Wait(500)
+        TriggerServerEvent('createSalesman:server',player, ped, playerCoords.x, playerCoords.y + 1, playerCoords.z)
+        FreezeEntityPosition(created,true)
+        SetPedConfigFlag(created, 0, true)
+        SetEntityInvincible(created, true)
 end)
 RegisterNUICallback('addGunToInventory',function(data,cb)
     local gunName = data[1]
@@ -115,4 +114,15 @@ RegisterNUICallback('loadInventoryPrice',function(_,cb)
         cb(prices)
     end)
 end)
-
+RegisterNUICallback('checkprivileges',function(_,cb)
+    local isAdmin = false
+    TriggerServerEvent('checkprivileges:server')
+    RegisterNetEvent('playerIsAdmin',function()
+        isAdmin = true
+        cb(isAdmin)
+    end)
+    RegisterNetEvent('playerIsNotAdmin',function()
+        isAdmin = false
+        cb(isAdmin)
+    end)
+end)

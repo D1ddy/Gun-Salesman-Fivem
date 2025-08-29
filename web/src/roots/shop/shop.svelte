@@ -22,12 +22,9 @@
         data = data.split(",");
         for(let i = 1; i < data.length; i++){
             arrayOfGuns[i-1].price = data[i];
-            console.log(arrayOfGuns[i-1].price);
         }
        
     });
-
-    // TODO FIGURE THIS SHIT FROM LINE 9 TO 23 IM TWEAKING THE FUCK OUT 
 </script>
 <style>
     div{
